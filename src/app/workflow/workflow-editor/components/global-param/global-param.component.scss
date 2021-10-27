@@ -1,0 +1,9 @@
+mat-card-content {
+  display: flex;
+  flex-direction: row;
+  gg-input-chip {
+    margin: 0 10px;
+    --chip-background: rgb(77, 188, 221, 0.25);
+    --socket-background: rgb(67, 149, 173);
+  }
+}

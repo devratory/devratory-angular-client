@@ -1,0 +1,63 @@
+.output gg-input-chip {
+  --chip-background: rgb(168 218 181 / 44%);
+}
+
+mat-card {
+  padding: 25px;
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.4);
+  mat-card-content {
+    margin: 16px 0px;
+  }
+}
+
+.arrow-icon {
+  width: 95px;
+  text-align: end;
+  height: 0;
+  border: dashed 1px #212121;
+  padding-top: 0;
+  line-height: 0;
+  z-index: 1000;
+  position: relative;
+}
+.input {
+  margin-bottom: 15px;
+}
+
+mat-card {
+  &.ms-call {
+  }
+
+  &.output {
+    background: #cdf4c4;
+  }
+
+  &.exec-code {
+  }
+}
+
+.close-button {
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  right: -5px;
+}
+
+.flow-in ::ng-deep .socket, .flow-out ::ng-deep .socket {
+  background: #86c6ff;
+}
+
+.flow-in {
+  position: absolute;
+  top: calc(50% - 20px);
+  left: 0;
+}
+
+.flow-out {
+  position: absolute;
+  top: calc(50% - 20px);
+  right: 0;
+}

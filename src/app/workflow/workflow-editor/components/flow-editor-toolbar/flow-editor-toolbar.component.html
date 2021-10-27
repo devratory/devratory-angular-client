@@ -1,0 +1,26 @@
+<mat-card class="toolbar" [formGroup]="toolbarForm">
+  <mat-card-content>
+    <mat-form-field appearance="outline">
+      <mat-label>HTTP Method</mat-label>
+      <mat-select matNativeControl required formControlName="httpMethod">
+        <mat-option *ngFor="let httpMethod of httpMethods" [value]="httpMethod">
+          {{ httpMethod | uppercase }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="url" appearance="outline">
+      <mat-label>URL</mat-label>
+      <input matInput placeholder="/users/:userId/profile" formControlName="url" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Require authentication</mat-label>
+      <mat-select [(ngModel)]="authenticationWorkflow" [ngModelOptions]="{ standalone: true }">
+        <mat-option [value]="'NO'">NO</mat-option>
+        <mat-option disabled>Select workflow to authenticate requests</mat-option>
+        <mat-option *ngFor="let workflow of workflows" [value]="workflow.id">
+          {{ workflow.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>

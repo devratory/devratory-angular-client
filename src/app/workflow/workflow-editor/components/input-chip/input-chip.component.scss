@@ -1,0 +1,98 @@
+$color: var(--chip-background, rgba(255, 215, 64, 0.5));
+
+.chip-container {
+  background: $color;
+  border-radius: 20px;
+}
+
+.chip {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  padding: 0 15px 0 0;
+
+  .chip-content {
+    display: inherit;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .name,
+  .type {
+    display: inherit;
+    align-items: center;
+  }
+  .input-connector {
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .add-icon {
+      display: none;
+    }
+    .input-icon {
+      display: block;
+    }
+    &:hover {
+      .add-icon {
+        display: block;
+      }
+      .input-icon {
+        display: none;
+      }
+    }
+  }
+}
+
+.expanded-content {
+  padding-left: 35px;
+  padding-top: 25px;
+  margin-top: -20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  overflow: hidden;
+
+  ::ng-deep .chip-container {
+    background: transparent;
+  }
+}
+
+:host(.inner-chip) {
+  .chip {
+    border-radius: 0;
+  }
+}
+rete-socket ::ng-deep .socket {
+  background: var(--socket-background);
+}
+
+.hidden-input {
+  rete-socket {
+    width: 0px;
+    height: 0px;
+  }
+  ::ng-deep .socket {
+    width: 0px;
+    margin: 0 !important;
+    height: 0px;
+  }
+}
+
+.expanded-content.plain-sockets {
+  padding: 0;
+  height: 0;
+  width: 0;
+  float: left;
+  margin-left: 50px;
+  margin-top: -20px;
+
+  gg-input-chip {
+    float: right;
+    margin-top: -18px;
+  }
+}
+
+.input {
+  margin-left: 30px;
+}

@@ -1,0 +1,23 @@
+<mat-card>
+  <mat-card-content>
+    <gg-input-chip
+      *ngIf="globals?.body"
+      [input]="globals.body"
+      [dynamic]="true"
+      [node]="node"
+      mode="input"
+    ></gg-input-chip>
+    <gg-input-chip
+      *ngIf="globals?.params"
+      [input]="globals.params"
+      [node]="node"
+      mode="input"
+    ></gg-input-chip>
+    <gg-input-chip
+      *ngIf="globals?.queryParams"
+      [input]="globals.queryParams"
+      [node]="node"
+      mode="input"
+    ></gg-input-chip>
+  </mat-card-content>
+</mat-card>

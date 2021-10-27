@@ -1,0 +1,41 @@
+<div class="chip-container" *ngIf="input">
+  <div class="chip" >
+    <div class="chip-content" *ngIf="!plainSockets">
+      <button mat-icon-button (click)="toggleExpand()" *ngIf="canExpand">
+        <mat-icon *ngIf="!expanded">chevron_right</mat-icon>
+        <mat-icon *ngIf="expanded">expand_more</mat-icon>
+      </button>
+      <span class="name">{{ name || input.name }}</span>
+      <span class="type">
+        {{ canExpand ? "" : ": " + input.type + (isArray ? "[]" : "") }}
+      </span>
+    </div>
+    <div class="input"  *ngIf="input.reteInput">
+      <!-- {{input.reteInput.key}} -->
+      <rete-socket
+      rete-socket
+      [io]="input.reteInput"
+      [socket]="input.reteInput.socket"
+    ></rete-socket>
+    </div>
+  </div>
+  <div class="expanded-content" [ngClass]="{'plain-sockets': plainSockets || (!expanded)}">
+    <div *ngIf="dynamic">
+      <button mat-button (click)="defineProperty()">
+        <mat-icon >add</mat-icon>
+        Define property
+      </button>
+    </div>
+    <ng-container *ngIf="!isArray">
+      <gg-input-chip
+        *ngFor="let expandedInput of expandableInputs"
+        class="inner-chip"
+        [input]="expandedInput"
+        [mode]="mode"
+        [node]="node"
+        [plainSockets]="!expanded"
+      >
+      </gg-input-chip>
+    </ng-container>
+  </div>
+</div>
