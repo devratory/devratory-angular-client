@@ -1,0 +1,37 @@
+<div fxLayout="column">
+  <mat-expansion-panel
+    *ngFor="let route of routes"
+    [hideToggle]="!route.children?.length"
+    [ngClass]="{ 'route-panel': !route.children?.length }"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <ng-container *ngTemplateOutlet="routeButton; context: { route: route }"></ng-container
+      ></mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="expanded-content" *ngIf="route.children?.length">
+      <ng-container *ngFor="let childRoute of route.children">
+        <ng-container *ngTemplateOutlet="routeButton; context: { route: childRoute }"> </ng-container>
+      </ng-container>
+    </div>
+  </mat-expansion-panel>
+</div>
+
+<ng-template #routeButton let-route="route">
+  <div
+    class="route-button"
+    fxLayout="row"
+    fxLayoutAlign="center center"
+    [routerLinkActiveOptions]="{ exact: true }"
+    [routerLink]="route.link"
+    [queryParams]="route.params"
+    [routerLinkActive]="'active-route'"
+  >
+    <div class="icon">
+      <mat-icon>{{ route.icon }}</mat-icon>
+    </div>
+    <div class="name" fxFlex="100%">
+      {{ route.name }}
+    </div>
+  </div>
+</ng-template>

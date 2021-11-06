@@ -1,6 +1,12 @@
 mat-toolbar {
   display: flex;
   flex-direction: row;
+  position: sticky;
+  position: -webkit-sticky; /* For macOS/iOS Safari */
+  top: 0; /* Sets the sticky toolbar to be on top */
+  z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
+  height: var(--header-height);
+  background: var(--color-dark);
 
   .start {
     display: inherit;
@@ -26,4 +32,12 @@ mat-toolbar {
       }
     }
   }
+}
+
+
+.logo {
+  background: blueviolet;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
 }

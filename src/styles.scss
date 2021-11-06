@@ -1,6 +1,6 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@use "~@angular/material" as mat;
+@use '@angular/material' as mat;
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -12,7 +12,7 @@
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $devlab-ui-primary: mat.define-palette(mat.$indigo-palette);
-$devlab-ui-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$devlab-ui-accent: mat.define-palette(mat.$amber-palette, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
 $devlab-ui-warn: mat.define-palette(mat.$red-palette);
@@ -42,7 +42,20 @@ body {
 }
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+// colors
+body {
+  --color-dark: #1f1f1f;
+  --background-color: #fff;
+  --color-light-gray: #efefef;
+}
+
+// css-variables
+body {
+  --header-height: 64px;
+  --sidebar-color: var(--color-light-gray);
 }
 
 .content {

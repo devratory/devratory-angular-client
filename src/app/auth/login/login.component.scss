@@ -1,0 +1,12 @@
+mat-card {
+  width: 350px;
+  height: 500px;
+  mat-card-content {
+    height: 100%;
+  }
+}
+
+.content {
+  background: var(--color-light-gray);
+  height: 100%;
+}

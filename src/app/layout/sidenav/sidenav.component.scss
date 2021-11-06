@@ -1,0 +1,52 @@
+:host {
+  width: 260px;
+  display: block;
+}
+
+button {
+  text-align: left;
+}
+
+mat-expansion-panel {
+  background: transparent;
+  box-shadow: none !important;
+}
+
+.route-button {
+  width: 100%;
+  cursor: pointer;
+  min-height: 40px;
+  border-radius: 5px;
+  color: rgba(31, 31, 31, 0.8);
+
+  &:hover,
+  &.active-route {
+    color: #5441f2;
+  }
+  .icon mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+  .name {
+    padding: 0 15px;
+    font-weight: 600;
+  }
+}
+
+.expanded-content {
+  .route-button {
+    &:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+.route-panel ::ng-deep {
+  .mat-expansion-panel-header {
+    height: 48px;
+  }
+  .mat-expansion-panel-content {
+    display: none;
+  }
+}
