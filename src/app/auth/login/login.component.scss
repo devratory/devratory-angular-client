@@ -8,5 +8,5 @@ mat-card {
 
 .content {
   background: var(--color-light-gray);
-  height: 100%;
+  height: calc(100% - var(--header-height));
 }

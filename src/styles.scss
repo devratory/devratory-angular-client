@@ -25,6 +25,7 @@ $devlab-ui-theme: mat.define-light-theme(
       primary: $devlab-ui-primary,
       accent: $devlab-ui-accent,
       warn: $devlab-ui-warn,
+      dark: $devlab-ui-warn,
     ),
   )
 );
@@ -48,7 +49,7 @@ body {
 // colors
 body {
   --color-dark: #1f1f1f;
-  --background-color: #fff;
+  --background-color: #f8f8f8;
   --color-light-gray: #efefef;
 }
 
@@ -65,5 +66,17 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+  }
+}
+.project-selector-list {
+  padding: 5px 15px;
+
+  button:last-child {
+    margin-top: 15px;
+  }
+  .project-item.selected {
+    color: #3f51b5;
+    background: rgb(63, 81, 181, 0.15);
+    font-weight: 500;
   }
 }

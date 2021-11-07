@@ -26,6 +26,7 @@
     [routerLink]="route.link"
     [queryParams]="route.params"
     [routerLinkActive]="'active-route'"
+    (click)="route.name ===  'Logout' && logout()"
   >
     <div class="icon">
       <mat-icon>{{ route.icon }}</mat-icon>

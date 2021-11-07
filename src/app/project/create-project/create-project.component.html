@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>Create New Project</h2>
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="createProjectForm">
+    <mat-form-field class="example-full-width" appearance="fill" [hideRequiredMarker]="false" appearance="outline">
+      <mat-label>Project Domain</mat-label>
+      <input cdkFocusInitial type="text" matInput placeholder="project-name" formControlName="name" autocomplete="false" />
+      <mat-hint matSuffix>.devlab.com</mat-hint>
+    </mat-form-field>
+    <mat-hint>
+      The domain name you choose here will be used for the API endpoints of your applications. Once chosen, a domain
+      name cannot be renamed.
+    </mat-hint>
+    <div fxLayout="column" class="env-selector">
+      <mat-label>Environment Tag <span>*</span></mat-label>
+      <div fxLayout="row" fxLayoutAlign="flex-start center">
+        <button
+          *ngFor="let tag of environmentTags"
+          mat-stroked-button
+          [color]="createProjectForm.value.environmentTag === tag.id ? 'primary' : null"
+          (click)="createProjectForm.patchValue({ environmentTag: tag.id })"
+        >
+          {{ tag.name }}
+        </button>
+      </div>
+    </div>
+    <mat-hint>
+      Differentiate between development, staging and production environments. Higher rate limits are applied to tenants
+      tagged as Production with a paid subscription. Learn more
+    </mat-hint>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close [mat-dialog-close]="true">Cancel</button>
+  <button mat-raised-button color="primary" (click)="createProject()">Create</button>
+</mat-dialog-actions>

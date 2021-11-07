@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { LandingComponent } from './landing.component';
-import { HeaderComponent } from './header/header.component';
-import { SharedModule } from '../shared/shared.module';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { SharedModule } from '../shared/shared.module';
+import { LandingComponent } from './landing.component';
 
 @NgModule({
-  declarations: [LandingComponent, HeaderComponent],
+  declarations: [LandingComponent],
   imports: [SharedModule, MatToolbarModule],
   exports: [LandingComponent],
 })

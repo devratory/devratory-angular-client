@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  width: 500px;
+}
+mat-form-field {
+  width: 100%;
+}
+mat-hint {
+  margin-bottom: 30px;
+  display: block;
+  &:last-child {
+    margin-top: 20px;
+  }
+}
+
+.env-selector {
+  width: 100%;
+  mat-label {
+    margin-bottom: 15px;
+    span {
+      color: red;
+    }
+  }
+  button {
+    margin-right: 7px;
+    font-weight: 500;
+    &.mat-primary {
+      border: 2px solid;
+    }
+  }
+}

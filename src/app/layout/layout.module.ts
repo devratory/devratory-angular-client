@@ -1,20 +1,16 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSelectModule } from '@angular/material/select';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { ProjectSharedModule } from '../project/project-shared.module';
+import { SharedModule } from '../shared/shared.module';
 import { HeaderComponent } from './header/header.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
-import { SharedModule } from '../shared/shared.module';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [HeaderComponent, SidenavComponent],
-  imports: [
-    SharedModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    MatExpansionModule,
-  ],
+  imports: [SharedModule, MatToolbarModule, MatExpansionModule, MatSelectModule, MatMenuModule, ProjectSharedModule],
   exports: [HeaderComponent, SidenavComponent],
 })
 export class LayoutModule {}

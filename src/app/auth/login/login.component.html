@@ -4,15 +4,16 @@
       <mat-card-title> Login </mat-card-title>
     </mat-card-header>
     <mat-card-content fxLayout="column" fxLayoutAlign="space-evenly">
-      <form fxLayout="column">
+      <form fxLayout="column" [formGroup]="loginForm">
         <mat-form-field>
-          <input type="text" matInput placeholder="Email/Username" />
+          <input type="text" matInput placeholder="Email/Username" formControlName="email" />
         </mat-form-field>
         <mat-form-field>
-          <input type="password" matInput placeholder="Password" />
+          <input type="password" matInput placeholder="Password" formControlName="password"/>
         </mat-form-field>
       </form>
-      <button mat-raised-button routerLink="/app" color="primary">Login</button>
+      <button mat-raised-button (click)="login()" color="primary">Login</button>
+      <button mat-raised-button (click)="register()" color="accent">Register</button>
     </mat-card-content>
   </mat-card>
 </div>
