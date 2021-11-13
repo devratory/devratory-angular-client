@@ -3,7 +3,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
+  OnDestroy,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { IWorkflow } from './models';
@@ -16,7 +19,9 @@ import { FlowEditorService } from './workflow-editor.service';
     <div class="wrapper">
       <dl-flow-editor-toolbar
         (toolbarChange)="onToolbarChange($event)"
+        (saveClick)="onSave($event)"
         [workflows]="workflows"
+        [workflow]="workflow"
       ></dl-flow-editor-toolbar>
       <div #nodeEditor class="node-editor"></div>
     </div>
@@ -35,29 +40,52 @@ import { FlowEditorService } from './workflow-editor.service';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FlowEditorContainer implements AfterViewInit {
+export class FlowEditorContainer implements AfterViewInit, OnDestroy {
   @ViewChild('nodeEditor', { static: true }) el!: ElementRef;
   @Input() flow!: IWorkflow;
+  @Input() isCreate = false;
+  private _workflow: IWorkflow<string> | null = null;
+  @Input() set workflow(workflow: IWorkflow<string> | null) {
+    this._workflow = workflow;
+    if (workflow) {
+      this.service.init(this.el.nativeElement, workflow);
+    }
+  }
+  get workflow(): IWorkflow<string> | null {
+    return this._workflow;
+  }
   @Input() workflows: IWorkflow[] = [
     { id: '1', name: 'GetAuthUser' },
     { id: '1', name: 'GetEvents' },
   ] as any;
 
+  @Output() save = new EventEmitter<any>();
+
   constructor(private service: FlowEditorService) {}
 
   ngAfterViewInit() {
-    this.service.init(this.el.nativeElement, this.flow);
+    if (this.isCreate) {
+      this.service.init(this.el.nativeElement, {} as any);
+    }
+  }
+
+  ngOnDestroy() {
+    this.service.reset();
   }
 
   onToolbarChange(ev: ToolbarChangeEvent) {
+    if (!this.service.ready$.getValue()) {
+      console.log('Service not ready');
+      return;
+    }
+
     const globals: any = {};
+    console.log('Toolbar change, and service ready', ev);
 
     if (['POST', 'PATCH', 'PUT'].includes(ev.httpMethod?.toUpperCase())) {
       globals.body = {
         name: 'body',
-        type: {
-
-        }
+        type: {},
       };
     }
 
@@ -81,7 +109,6 @@ export class FlowEditorContainer implements AfterViewInit {
     }
 
     this.service.createGlobalComponent(globals);
-    //create globals
   }
 
   private _arrToStepInput(items: string[], name: string) {
@@ -99,5 +126,11 @@ export class FlowEditorContainer implements AfterViewInit {
         {}
       ),
     };
+  }
+  onSave(toolbarForm: ToolbarChangeEvent) {
+    this.save.emit({
+      ...toolbarForm,
+      ...this.service.editor?.toJSON(),
+    });
   }
 }

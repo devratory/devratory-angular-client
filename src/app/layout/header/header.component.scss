@@ -1,0 +1,58 @@
+mat-toolbar {
+  display: flex;
+  flex-direction: row;
+  position: sticky;
+  position: -webkit-sticky; /* For macOS/iOS Safari */
+  top: 0; /* Sets the sticky toolbar to be on top */
+  z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
+  height: var(--header-height);
+  background: var(--color-dark);
+
+  .start {
+    display: inherit;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    img {
+      width: 50%;
+    }
+  }
+}
+
+.logo {
+  background: blueviolet;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+}
+
+.spacer {
+  width: 1px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.25);
+  margin: 0 45px 0 15px;
+}
+
+.user-logo {
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.05);
+  }
+  img {
+    height: 100%;
+    width: 100%;
+  }
+}
+:host(app-header) {
+  .end button {
+    color: #9c9fae;
+  }
+}
+
+
+.body > *:not(:last-child) {
+  margin-right: 25px;
+}

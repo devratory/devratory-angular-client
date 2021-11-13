@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { ProjectService } from 'src/app/project/project.service';
+import { WorkflowService } from '../workflow.service';
 
 @Component({
   selector: 'app-workflow-list',
@@ -7,8 +9,10 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./workflow-list.component.scss'],
 })
 export class WorkflowListComponent implements OnInit {
-  workflows$ = new BehaviorSubject([]);
-  constructor() {}
+  workflows$ = this.service.items$;
+  constructor(private service: WorkflowService, private projectService: ProjectService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.service.getByProjctId(this.projectService.getActiveId(), true).subscribe();
+  }
 }

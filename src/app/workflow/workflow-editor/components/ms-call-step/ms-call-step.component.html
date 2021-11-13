@@ -1,7 +1,7 @@
 <mat-card class="ms-call">
   <mat-card-header>
     <mat-card-title>
-      {{ methodDefinition.method.name }}
+      {{ methodDefinition?.method?.name }}
     </mat-card-title>
   </mat-card-header>
   <button
@@ -16,7 +16,7 @@
     <div class="input">
       <b>Input</b>
       <gg-input-chip
-        [input]="methodDefinition.method.input"
+        [input]="methodDefinition?.method?.input"
         [node]="node"
         mode="input"
       ></gg-input-chip>
@@ -24,12 +24,12 @@
     <div class="output">
       <b>Output</b>
       <gg-input-chip
-        [input]="methodDefinition.method.output"
+        [input]="methodDefinition?.method?.output"
         [node]="node"
         mode="output"
       ></gg-input-chip>
     </div>
   </mat-card-content>
-    <rete-socket class="flow-in" *ngIf="methodDefinition.method.flowIn" rete-socket [io]="methodDefinition.method.flowIn" [socket]="methodDefinition.method.flowIn.socket"></rete-socket>
-    <rete-socket class="flow-out" *ngIf="methodDefinition.method.flowOut" rete-socket [io]="methodDefinition.method.flowOut" [socket]="methodDefinition.method.flowOut.socket"></rete-socket>
+    <rete-socket class="flow-in" *ngIf="methodDefinition?.method?.flowIn" rete-socket [io]="methodDefinition.method.flowIn" [socket]="methodDefinition.method.flowIn.socket"></rete-socket>
+    <rete-socket class="flow-out" *ngIf="methodDefinition?.method?.flowOut" rete-socket [io]="methodDefinition.method.flowOut" [socket]="methodDefinition.method.flowOut.socket"></rete-socket>
 </mat-card>

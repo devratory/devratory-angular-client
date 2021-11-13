@@ -23,4 +23,7 @@
       </mat-select>
     </mat-form-field>
   </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="saveClick.emit(toolbarForm.getRawValue())">Save</button>
+  </mat-card-actions>
 </mat-card>

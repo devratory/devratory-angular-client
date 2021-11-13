@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs/operators';
 import { ProjectService } from './project.service';
 
 @Component({
@@ -30,10 +30,18 @@ import { ProjectService } from './project.service';
   ],
 })
 export class ProjectContainer implements OnInit {
-  constructor(private route: ActivatedRoute, private service: ProjectService) {
-    this.route.paramMap
-      .pipe(filter((params) => params.has('id')))
-      .subscribe((paramMap) => this.service.setActive(paramMap.get('id') as string));
+  constructor(private route: ActivatedRoute, private service: ProjectService, private router: Router) {
+    this.route.paramMap.pipe(map((params) => params.get('id'))).subscribe((id) => {
+      if (!id) {
+        this.service.getAll().subscribe((projects) => {
+          if (projects[0]) {
+            this.router.navigate(['/project', projects[0].id]);
+          }
+        });
+      } else {
+        this.service.setActive(id as string);
+      }
+    });
   }
 
   ngOnInit(): void {}

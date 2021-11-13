@@ -4,6 +4,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnInit,
   Output,
 } from '@angular/core';
 import { NodeComponent, NodeService } from 'rete-angular-render-plugin';
@@ -28,8 +29,7 @@ const TYPE_TO_ICON: any = {
   providers: [NodeService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MsCallStepComponent extends NodeComponent {
-  @Input() methodDefinition!: { ms: string; method: MethodDefinition };
+export class MsCallStepComponent extends NodeComponent implements OnInit {
   @Output() connect = new EventEmitter<{ connector: string; type: string }>();
   @Output() deleteStep = new EventEmitter();
   connectors = ['top', 'bottom', 'right', 'left'].map((type) => ({
@@ -45,10 +45,16 @@ export class MsCallStepComponent extends NodeComponent {
   };
   activeConnector!: string;
   expandedInputs: { [key: string]: boolean } = {};
-  constructor(
-    protected service: NodeService,
-    protected cdr: ChangeDetectorRef
-  ) {
+
+  get methodDefinition() {
+    return (this.node?.data as any) || {};
+  }
+
+  constructor(protected service: NodeService, protected cdr: ChangeDetectorRef) {
     super(service, cdr);
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
   }
 }

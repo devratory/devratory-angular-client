@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   declarations: [],
   imports: [
@@ -22,6 +22,7 @@ import { MatCardModule } from '@angular/material/card';
     MatFormFieldModule,
     FlexLayoutModule,
     MatCardModule,
+    MatTooltipModule,
   ],
   exports: [
     CommonModule,
@@ -34,6 +35,7 @@ import { MatCardModule } from '@angular/material/card';
     MatFormFieldModule,
     FlexLayoutModule,
     MatCardModule,
+    MatTooltipModule,
   ],
 })
 export class SharedModule {}

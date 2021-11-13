@@ -1,7 +1,17 @@
 <div class="content">
   <div class="toolbar">
-    <button mat-raised-button color="primary" routerLink="create">
-      Create
-    </button>
+    <button mat-raised-button color="primary" routerLink="create">Create</button>
   </div>
+  <h1>Workflows</h1>
+  <mat-list role="list" *ngIf="workflows$ | async as workflows">
+    <mat-list-item role="listitem" *ngFor="let workflow of workflows">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <span>
+          <b>{{ workflow.httpMethod }}</b>
+          {{ workflow.url }}
+        </span>
+        <button mat-button matSuffix color="primary" [routerLink]="[workflow.id, 'edit']">Edit</button>
+      </div>
+    </mat-list-item>
+  </mat-list>
 </div>

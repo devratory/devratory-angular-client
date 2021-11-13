@@ -19,7 +19,9 @@ export class ProjectService {
   constructor(private http: HttpClient) {}
 
   create(project: Project) {
-    return this.http.post<Project>(`${environment.gatewayUrl}/projects`, project).pipe(tap(createdProject => this._items$.next([createdProject,...this._items$.getValue()])))
+    return this.http
+      .post<Project>(`${environment.gatewayUrl}/projects`, project)
+      .pipe(tap((createdProject) => this._items$.next([createdProject, ...this._items$.getValue()])));
   }
 
   getAll(force = false) {
@@ -34,5 +36,9 @@ export class ProjectService {
 
   setActive(id?: string) {
     this._activeItemId$.next(id || null);
+  }
+
+  getActiveId() {
+    return this._activeItemId$.getValue();
   }
 }

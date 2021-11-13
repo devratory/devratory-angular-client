@@ -1,0 +1,17 @@
+<button color="primary" mat-raised-button [matMenuTriggerFor]="exportMenu">
+  Export
+  <mat-icon>arrow_drop_down</mat-icon>
+</button>
+
+<mat-menu #exportMenu="matMenu" xPosition="after"  class="project-selector-list">
+  <button mat-menu-item>Docker Compose</button>
+  <button mat-menu-item [matMenuTriggerFor]="clientSDK">Client SDK</button>
+</mat-menu>
+
+<mat-menu #clientSDK="matMenu" class="project-selector-list">
+  <button mat-menu-item>Angular</button>
+  <button mat-menu-item>React</button>
+  <button mat-menu-item>Vue</button>
+  <button mat-menu-item>Svelte</button>
+  <button mat-menu-item>JS</button>
+</mat-menu>

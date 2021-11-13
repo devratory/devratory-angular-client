@@ -1,4 +1,36 @@
-import { MethodDefinition } from './method-definition.interface';
+import { NodesData } from 'rete/types/core/data';
+import { Input, Output } from 'rete';
+
+export interface StepInput<T, E = string[] | number[]> {
+  name: string;
+  type: T;
+  optional: boolean;
+  default: any;
+  enum?: E;
+  description: string;
+  reteInput: any;
+  key: string;
+}
+
+export interface MethodDefinition {
+  name: string;
+  input: StepInput<any>;
+  pattern: any;
+  type: 'MessagePattern' | 'EventPattern';
+  output: StepInput<any>;
+  flowOut?: Output;
+  flowIn?: Input;
+}
+
+export interface IWorkflow<T = string | NodesData> {
+  id: string;
+  name: string;
+  url: string;
+  httpMethod: 'post' | 'get' | 'put' | 'delete' | 'patch';
+  nodes: T;
+  authWorkflow?: string;
+  output: IStepPayload;
+}
 
 export enum NodeType {
   MicroserviceCall = 'MS_CALL',

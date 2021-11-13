@@ -70,13 +70,22 @@ body {
 }
 .project-selector-list {
   padding: 5px 15px;
-
-  button:last-child {
-    margin-top: 15px;
-  }
-  .project-item.selected {
-    color: #3f51b5;
-    background: rgb(63, 81, 181, 0.15);
-    font-weight: 500;
+  width: 200px;
+  .mat-menu-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center center;
+    .mat-list-text,
+    .mat-list-item-content {
+      padding-right: 0 !important;
+    }
+    button.create-button {
+      margin-top: 15px;
+    }
+    .project-item.selected {
+      color: #3f51b5;
+      background: rgb(63, 81, 181, 0.15);
+      font-weight: 500;
+    }
   }
 }

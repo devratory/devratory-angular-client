@@ -1,18 +1,11 @@
 import { Injectable } from '@angular/core';
-import {
-  AuthService,
-  CategoryService,
-  EventParams,
-  EventService,
-  User,
-  UserPreference,
-  UserService,
-} from '@ekhmoi/angular-sdk';
+import { AuthService, EventParams, EventService, User, UserPreference, UserService } from '@ekhmoi/angular-sdk';
 import { BehaviorSubject } from 'rxjs';
+import { ProjectService } from '../project/project.service';
 const STORAGE_KEYS = {
   USER: '@app/user/info',
   AUTH_TOKEN: '@app/auth/token',
-}
+};
 
 @Injectable({
   providedIn: 'root',
@@ -22,8 +15,8 @@ export class ConfigService {
   constructor(
     private authService: AuthService,
     private gameEventService: EventService,
-    private categoryService: CategoryService,
-    private userService: UserService,
+    private projectService: ProjectService,
+    private userService: UserService
   ) {}
 
   setInit(init: boolean) {
@@ -39,8 +32,11 @@ export class ConfigService {
         this.userService.upsertPreferences([{ name: 'UI_THEME', value: JSON.stringify({ selected: 'dark' }) } as any]);
       }
       if (token) {
-        const user: User = JSON.parse(localStorage.getItem(STORAGE_KEYS.USER) || "{}");
+        const user: User = JSON.parse(localStorage.getItem(STORAGE_KEYS.USER) || '{}');
         const loggedUser = await this.authService.loginStoredUser(token, user).toPromise();
+        if (loggedUser) {
+          await this.projectService.getAll().toPromise();
+        }
         this.applyUserPreferences(loggedUser?.preferences);
       }
       const params = this.userService.getUserPreference('EVENT_PARAMS');

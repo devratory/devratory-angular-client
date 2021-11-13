@@ -22,7 +22,7 @@
     class="route-button"
     fxLayout="row"
     fxLayoutAlign="center center"
-    [routerLinkActiveOptions]="{ exact: true }"
+    [routerLinkActiveOptions]="{ exact: route.name ===  'Logout' }"
     [routerLink]="route.link"
     [queryParams]="route.params"
     [routerLinkActive]="'active-route'"

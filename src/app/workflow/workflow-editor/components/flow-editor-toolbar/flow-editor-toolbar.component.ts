@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Output, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Output, Input, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { IWorkflow } from '../../models';
@@ -24,5 +24,19 @@ export class FlowEditorToolbarComponent {
     authWorkflow: new FormControl(null),
   });
   @Input() workflows: IWorkflow[] = [];
+  @Input() set workflow(wf: IWorkflow<string> | null) {
+    if (wf) {
+      const { httpMethod, url, authWorkflow } = wf;
+      this.toolbarForm.setValue(
+        {
+          httpMethod,
+          url,
+          authWorkflow,
+        },
+        { emitEvent: false }
+      );
+    }
+  }
   @Output() toolbarChange = this.toolbarForm.valueChanges.pipe(debounceTime(309));
+  @Output() saveClick = new EventEmitter();
 }

@@ -57,8 +57,9 @@ export function getMockMethod(id: number) {
   };
   return {
     $$type: 'MS_CALL',
+    ms: '@anyteam/user-ms:1.0.1',
     method: {
-      msName: '@anyteam/user-ms@1.0.1',
+      msName: '@anyteam/user-ms:1.0.1',
       name: METHOD_NAMES[id] || id.toString(),
       type: 'MessagePattern',
       pattern: '@user/create',

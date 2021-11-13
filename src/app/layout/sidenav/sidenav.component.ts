@@ -19,10 +19,7 @@ export class SidenavComponent implements OnInit {
     {
       name: 'Workflows',
       icon: 'account_tree',
-      children: [
-        { name: 'List of workflows', link: ['workflows'] },
-        { name: 'Create new workflow', link: ['workflows', 'create'] },
-      ],
+      link: ['workflows']
     },
     { name: 'Microservices', link: ['microservices'], icon: 'dns' },
     {
