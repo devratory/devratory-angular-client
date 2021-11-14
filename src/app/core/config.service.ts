@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService, EventParams, EventService, User, UserPreference, UserService } from '@ekhmoi/angular-sdk';
 import { BehaviorSubject } from 'rxjs';
-import { ProjectService } from '../project/project.service';
+import { ProjectService } from '../project/state';
 const STORAGE_KEYS = {
   USER: '@app/user/info',
   AUTH_TOKEN: '@app/auth/token',

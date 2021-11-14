@@ -3,3 +3,7 @@ export interface Project {
   name: string;
   environmentTag: 'prod' | 'stag' | 'dev' | 'test';
 }
+
+export function createProject(params: Partial<Project>) {
+  return {} as Project;
+}

@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
-import { ProjectService } from 'src/app/project/project.service';
-import { IWorkflow } from '../workflow.interface';
-import { WorkflowService } from '../workflow.service';
+import { filterNilValue } from '@datorama/akita';
+import { take } from 'rxjs/operators';
+import { ProjectQuery } from 'src/app/project/state';
+import { Workflow, WorkflowQuery, WorkflowService, WorkflowStore } from '../state';
 
 @Component({
   selector: 'app-edit-workflow',
@@ -13,28 +12,27 @@ import { WorkflowService } from '../workflow.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditWorkflowComponent implements OnInit {
-  workflow$: any = this.service.active$.pipe(
-    filter((wf) => !!wf),
-    take(1)
-  );
+  workflow$: any = this.query.active$.pipe(filterNilValue(), take(1));
   constructor(
     private service: WorkflowService,
+    private query: WorkflowQuery,
+    private store: WorkflowStore,
     private route: ActivatedRoute,
-    private projectService: ProjectService
+    private projectQuery: ProjectQuery
   ) {}
 
   ngOnInit(): void {
-    this.service.getByProjctId(this.projectService.getActiveId()).subscribe();
-    this.service.setActive(this.route.snapshot.paramMap.get('id') as any);
+    this.store.setActive(this.route.snapshot.paramMap.get('id') as any);
+    this.service
+      .get(this.route.snapshot.paramMap.get('id'), {
+        params: { projectId: this.projectQuery.getActiveId() },
+        upsert: true,
+      })
+      .subscribe();
   }
 
-  onSave(workflow: IWorkflow) {
-    this.service
-      .update(this.projectService.getActiveId() as string, {
-        ...workflow,
-        id: workflow.id.split('@')[0] || workflow.id,
-        nodes: JSON.stringify(workflow.nodes),
-      })
-      .subscribe(console.log);
+  onSave(workflow: Workflow) {
+    const id = workflow.id.split('@')[0] || workflow.id;
+    this.service.update(id, { ...workflow, id, nodes: JSON.stringify(workflow.nodes) }).subscribe();
   }
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { ProjectService } from 'src/app/project/project.service';
-import { WorkflowService } from '../workflow.service';
+import { ProjectQuery } from 'src/app/project/state';
+import { WorkflowQuery, WorkflowService } from '../state';
 
 @Component({
   selector: 'app-workflow-list',
@@ -9,10 +8,10 @@ import { WorkflowService } from '../workflow.service';
   styleUrls: ['./workflow-list.component.scss'],
 })
 export class WorkflowListComponent implements OnInit {
-  workflows$ = this.service.items$;
-  constructor(private service: WorkflowService, private projectService: ProjectService) {}
+  workflows$ = this.query.selectAll();
+  constructor(private service: WorkflowService, private query: WorkflowQuery, private projectQuery: ProjectQuery) {}
 
   ngOnInit(): void {
-    this.service.getByProjctId(this.projectService.getActiveId(), true).subscribe();
+    this.service.get({ params: { projectId: this.projectQuery.getActiveId() }, upsert: true }).subscribe();
   }
 }

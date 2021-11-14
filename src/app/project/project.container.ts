@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { ProjectService } from './project.service';
+import { ProjectQuery, ProjectService, ProjectStore } from './state';
 
 @Component({
   selector: 'app-project',
@@ -30,7 +30,13 @@ import { ProjectService } from './project.service';
   ],
 })
 export class ProjectContainer implements OnInit {
-  constructor(private route: ActivatedRoute, private service: ProjectService, private router: Router) {
+  constructor(
+    private route: ActivatedRoute,
+    private service: ProjectService,
+    private store: ProjectStore,
+    private query: ProjectQuery,
+    private router: Router
+  ) {
     this.route.paramMap.pipe(map((params) => params.get('id'))).subscribe((id) => {
       if (!id) {
         this.service.getAll().subscribe((projects) => {
@@ -39,7 +45,7 @@ export class ProjectContainer implements OnInit {
           }
         });
       } else {
-        this.service.setActive(id as string);
+        this.store.setActive(id as string);
       }
     });
   }

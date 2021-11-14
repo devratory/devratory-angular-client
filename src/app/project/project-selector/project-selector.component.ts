@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateProjectComponent } from '../create-project/create-project.component';
-import { ProjectService } from '../project.service';
+import { ProjectQuery, ProjectService } from '../state';
 
 @Component({
   selector: 'app-project-selector',
@@ -15,7 +15,7 @@ import { ProjectService } from '../project.service';
         <ng-template #selectProject>Select project</ng-template>
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
-      <mat-menu #projectsMenu="matMenu" xPosition="after"  class="project-selector-list">
+      <mat-menu #projectsMenu="matMenu" xPosition="after" class="project-selector-list">
         <mat-selection-list #shoes [multiple]="false" (selectionChange)="switchToProject($event.option.value)">
           <mat-list-option
             *ngFor="let project of data.projects"
@@ -78,15 +78,20 @@ import { ProjectService } from '../project.service';
   ],
 })
 export class ProjectSelectorComponent {
-  projects$ = this.service.getAll();
-  activeProject$ = this.service.active$;
+  projects$ = this.query.projects$;
+  activeProject$ = this.query.active$;
 
   constructor(
     private service: ProjectService,
     private dialogService: MatDialog,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private query: ProjectQuery
   ) {}
+
+  ngOnInit() {
+    this.service.getAll();
+  }
 
   switchToProject(projectId: string) {
     const projectUrl = '/project';

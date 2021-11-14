@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@ekhmoi/angular-sdk';
 import { switchMap } from 'rxjs/operators';
-import { ProjectService } from 'src/app/project/project.service';
+import { ProjectService } from '../../project/state';
 
 @Component({
   selector: 'app-login',

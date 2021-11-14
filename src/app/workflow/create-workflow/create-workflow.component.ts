@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ProjectService } from 'src/app/project/project.service';
-import { IWorkflow } from '../workflow.interface';
-import { WorkflowService } from '../workflow.service';
+import { ProjectQuery } from '../../project/state';
+import { WorkflowService, Workflow } from '../state';
 
 @Component({
   selector: 'app-create-workflow',
@@ -9,14 +8,15 @@ import { WorkflowService } from '../workflow.service';
   styleUrls: ['./create-workflow.component.scss'],
 })
 export class CreateWorkflowComponent implements OnInit {
-  constructor(private service: WorkflowService, private projectService: ProjectService) {}
+  constructor(private service: WorkflowService, private projectQuery: ProjectQuery) {}
 
   ngOnInit(): void {}
 
-  onSave(workflow: IWorkflow) {
+  onSave(workflow: Workflow) {
     this.service
-      .create(this.projectService.getActiveId(), {
+      .add({
         ...workflow,
+        projectId: this.projectQuery.getActiveId() as string,
         nodes: JSON.stringify(workflow.nodes),
       })
       .subscribe(console.log);

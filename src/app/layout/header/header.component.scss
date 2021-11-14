@@ -52,7 +52,13 @@ mat-toolbar {
   }
 }
 
-
 .body > *:not(:last-child) {
   margin-right: 25px;
+}
+
+.logo {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

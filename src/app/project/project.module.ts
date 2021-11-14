@@ -7,15 +7,17 @@ import { LayoutModule } from '../layout/layout.module';
 import { SharedModule } from '../shared/shared.module';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { NewProjectComponent } from './new-project/new-project.component';
+import { ProjectRedirectGuard } from './project-redirect.guard';
 import { ProjectSharedModule } from './project-shared.module';
 import { ProjectContainer } from './project.container';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'new' },
+  { path: '', pathMatch: 'full', redirectTo: 'default' },
   { path: 'new', component: NewProjectComponent },
   {
-    path: ':id',
+    path: ':projectId',
     component: ProjectContainer,
+    canActivate: [ProjectRedirectGuard],
     children: [
       {
         path: 'dashboard',

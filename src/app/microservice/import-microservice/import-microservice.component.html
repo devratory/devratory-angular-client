@@ -2,12 +2,7 @@
 <div mat-dialog-content>
   <mat-form-field appearance="fill">
     <mat-label>Name</mat-label>
-    <input
-      cdkFocusInitial
-      matInput
-      [(ngModel)]="name"
-      placeholder="Unique name for this microservice"
-    />
+    <input cdkFocusInitial matInput [(ngModel)]="name" placeholder="Unique name for this microservice" />
   </mat-form-field>
   <ng-container *ngIf="data.importType === 'docker-image'">
     <mat-form-field appearance="fill">
@@ -16,8 +11,10 @@
     </mat-form-field>
     <mat-form-field appearance="fill" class="file-upload-form">
       <mat-label>Contract</mat-label>
-      <input matInput disabled readonly [value]="contractName || ''" />
-      <button color="primary" mat-raised-button>Select File</button>
+      <input matInput disabled readonly [value]="contract?.name || ''" />
+
+      <button type="button"  color="primary" mat-raised-button (click)="fileInput.click()">Select File</button>
+      <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" />
     </mat-form-field>
   </ng-container>
 

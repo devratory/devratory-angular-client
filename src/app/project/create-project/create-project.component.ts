@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ProjectService } from '../project.service';
+import { ProjectService } from '../state';
 
 @Component({
   selector: 'app-create-project',

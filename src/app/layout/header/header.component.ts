@@ -6,7 +6,7 @@ import { AuthQuery } from '@ekhmoi/angular-sdk';
   template: `
     <mat-toolbar color="dark" fxLayout="row" *ngIf="auth.user$ | async as user">
       <div class="start">
-        <div class="logo">DL</div>
+        <div class="logo" routerLink="/">DL</div>
       </div>
 
       <div class="spacer"></div>
