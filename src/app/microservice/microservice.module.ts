@@ -7,6 +7,9 @@ import { MicroserviceListComponent } from './microservice-list/microservice-list
 import { ImportMicroserviceComponent } from './import-microservice/import-microservice.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatListModule } from '@angular/material/list';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [MicroserviceListComponent, ImportMicroserviceComponent],
@@ -16,6 +19,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatExpansionModule,
     MatMenuModule,
     MatDialogModule,
+    MatListModule,
+    FlexLayoutModule,
+    MatCheckboxModule,
   ],
 })
 export class MicroserviceModule {}

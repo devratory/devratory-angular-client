@@ -51,6 +51,7 @@ body {
   --color-dark: #1f1f1f;
   --background-color: #f8f8f8;
   --color-light-gray: #efefef;
+  --color-primary: map-get($devlab-ui-theme, 'primary');
 }
 
 // css-variables

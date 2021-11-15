@@ -6,7 +6,7 @@ import { MicroserviceStore, MicroserviceState } from './microservice.store';
 export class MicroserviceService extends NgEntityService<MicroserviceState> {
 
   constructor(protected store: MicroserviceStore) {
-    super(store);
+    super(store, {resourceName: 'microservices'});
   }
 
 }
