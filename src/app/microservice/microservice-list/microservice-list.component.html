@@ -1,27 +1,23 @@
 <div class="content">
   <div class="toolbar">
-    <button mat-raised-button color="primary" [matMenuTriggerFor]="importType">
-      Import
-    </button>
+    <button color="primary" mat-raised-button (click)="onClickImport()">Import</button>
   </div>
   <mat-accordion *ngIf="microservices$ | async as microservices">
     <mat-expansion-panel *ngFor="let microservice of microservices">
       <mat-expansion-panel-header>
         <mat-panel-title>{{ microservice.name }}</mat-panel-title>
-        <mat-panel-description>
-          This is a summary of the content
-        </mat-panel-description>
+        <mat-panel-description> {{ microservice.dockerImageUrl }} </mat-panel-description>
       </mat-expansion-panel-header>
       <div class="methods-list">
-        <ul>
-          <li *ngFor="let method of microservice.methods">{{ method.name }}</li>
-        </ul>
+        Definitions
+        <pre>
+          {{ microservice.contract.definitions | json }}
+        </pre>
+        Methods
+        <pre>
+          {{ microservice.contract.methods | json }}
+        </pre>
       </div>
     </mat-expansion-panel>
   </mat-accordion>
 </div>
-
-<mat-menu #importType="matMenu" yPosition="above">
-  <button mat-menu-item (click)="onClickImport('source')">From source</button>
-  <button mat-menu-item (click)="onClickImport('docker-image')">Docker image</button>
-</mat-menu>

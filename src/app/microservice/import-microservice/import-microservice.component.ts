@@ -1,38 +1,25 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-class ContractDefinition {}
-class ContractMethod {
-  name!: string;
-  description!: string;
-  type!: 'MessagePattern' | 'EventPattern';
-  pattern!: string;
-  input?: string; // reference to definition
-  output?: string; // reference to definition
-}
-
-export class Contract {
-  id!: string;
-  name!: string;
-  version!: string;
-  transport!: number;
-  definitions!: {
-    [key: string]: ContractDefinition;
-  };
-  methods!: ContractMethod[];
-  createdBy!: string;
-}
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { ProjectQuery } from 'src/app/project/state';
+import { Contract } from '../state/microservice.model';
+import { MicroserviceService } from '../state/microservice.service';
 
 @Component({
   selector: 'app-import-microservice',
   templateUrl: './import-microservice.component.html',
   styleUrls: ['./import-microservice.component.scss'],
 })
-export class ImportMicroserviceComponent implements OnInit {
+export class ImportMicroserviceComponent {
+  static config = {
+    width: '800px',
+  };
   titles = {
     source: 'Import from source',
     'docker-image': 'Import from Docker Image',
   };
+  variables: {
+    [variable: string]: string;
+  } = {};
 
   name!: string;
   dockerImageUrl!: string;
@@ -40,12 +27,17 @@ export class ImportMicroserviceComponent implements OnInit {
   sourcePath!: string;
   contractName!: string;
 
-  constructor(
-    public dialogRef: MatDialogRef<ImportMicroserviceComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { importType: 'source' | 'docker-image' }
-  ) {}
+  // public dialogRef: MatDialogRef<ImportMicroserviceComponent>,
+  // @Inject(MAT_DIALOG_DATA) public data: { importType: 'source' | 'docker-image' }
+  data: { importType: 'source' | 'docker-image' } = {
+    importType: 'docker-image',
+  };
 
-  ngOnInit(): void {}
+  constructor(
+    private service: MicroserviceService,
+    private dialogRef: MatDialogRef<ImportMicroserviceComponent>,
+    private projectQuery: ProjectQuery
+  ) {}
 
   onFileSelected(ev: Event) {
     const inputNode: any = ev.target;
@@ -55,14 +47,29 @@ export class ImportMicroserviceComponent implements OnInit {
 
       // This event listener will happen when the reader has read the file
       reader.addEventListener('load', () => {
-        try {
-          this.contract = JSON.parse(reader.result as any) as Contract;
-        } catch (err) {
-          console.warn('Selected file is not valid Contract');
-        }
+        this.contract = Contract.fromJSONString(reader.result as string) as Contract;
+        Object.values(this.contract.dependencies).forEach((dependency) => {
+          if (dependency.required) {
+            dependency.selected = true;
+          }
+        });
       });
 
       reader.readAsText(inputNode.files[0]); // Read the uploaded file
     }
+  }
+
+  create() {
+    this.service
+      .add({
+        name: this.name,
+        dockerImageUrl: this.dockerImageUrl,
+        contract: this.contract,
+        projectId: this.projectQuery.getActiveId(),
+      })
+      .subscribe((res) => {
+        console.log(res);
+        this.dialogRef.close(res);
+      });
   }
 }

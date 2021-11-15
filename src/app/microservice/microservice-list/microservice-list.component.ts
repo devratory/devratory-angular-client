@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { ImportMicroserviceComponent } from '../import-microservice/import-microservice.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ProjectQuery } from 'src/app/project/state';
+import { ImportMicroserviceComponent } from '../import-microservice/import-microservice.component';
+import { MicroserviceQuery } from '../state/microservice.query';
+import { MicroserviceService } from '../state/microservice.service';
 
 interface MethodDefinition {
   name: string;
@@ -18,18 +20,21 @@ export interface IMicroservice {
   styleUrls: ['./microservice-list.component.scss'],
 })
 export class MicroserviceListComponent implements OnInit {
-  microservices$ = new BehaviorSubject<IMicroservice[]>([]);
-  constructor(private dialog: MatDialog) {}
+  microservices$ = this.query.microservices$;
+  constructor(
+    private dialog: MatDialog,
+    private query: MicroserviceQuery,
+    private service: MicroserviceService,
+    private projectQuery: ProjectQuery
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.service.get({ params: { projectId: this.projectQuery.getActiveId() } }).subscribe();
+  }
 
-  onClickImport(importType: 'source' | 'docker-image') {
-    const dialogRef = this.dialog.open(ImportMicroserviceComponent, {
-      width: '450px',
-      data: { importType },
-    });
+  onClickImport() {
+    const dialogRef = this.dialog.open(ImportMicroserviceComponent, ImportMicroserviceComponent.config);
 
-    dialogRef.afterClosed().subscribe((result) => {
-    });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 }

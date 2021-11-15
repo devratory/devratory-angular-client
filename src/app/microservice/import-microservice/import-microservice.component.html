@@ -1,21 +1,77 @@
 <h1 mat-dialog-title>{{ titles[data.importType] }}</h1>
 <div mat-dialog-content>
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>Name</mat-label>
-    <input cdkFocusInitial matInput [(ngModel)]="name" placeholder="Unique name for this microservice" />
+    <input matInput [(ngModel)]="name" placeholder="Unique name for this microservice" />
   </mat-form-field>
   <ng-container *ngIf="data.importType === 'docker-image'">
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline">
       <mat-label>Docker Image URL</mat-label>
       <input matInput [(ngModel)]="dockerImageUrl" />
     </mat-form-field>
-    <mat-form-field appearance="fill" class="file-upload-form">
-      <mat-label>Contract</mat-label>
+    <mat-form-field appearance="outline" class="file-upload-form">
+      <mat-label>Microservice Contract</mat-label>
       <input matInput disabled readonly [value]="contract?.name || ''" />
 
-      <button type="button"  color="primary" mat-raised-button (click)="fileInput.click()">Select File</button>
+      <button type="button" color="primary" mat-button (click)="fileInput.click()">Select File</button>
       <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" />
     </mat-form-field>
+
+    <ng-container *ngIf="contract">
+      <mat-card *ngIf="(contract.environmentVariables | keyvalue)?.length">
+        <mat-card-title>Environment variables</mat-card-title>
+        <mat-card-content>
+          <mat-form-field appearance="outline" *ngFor="let variable of contract.environmentVariables | keyvalue">
+            <mat-label>{{ variable.key }}</mat-label>
+            <input
+              cdkFocusInitial
+              matInput
+              [(ngModel)]="variable.value.value"
+              [placeholder]="variable.value.default ? 'Default ' + variable.value.default : 'Enter value...'"
+            />
+            <mat-hint *ngIf="variable.value.description">{{ variable.value.description }}</mat-hint>
+            <mat-hint *ngIf="variable.value.example"
+              ><i>Example: {{ variable.value.example }}</i></mat-hint
+            >
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-title>Dependencies</mat-card-title>
+        <mat-card-content>
+          <mat-list
+            *ngIf="contract.dependencies && contract.dependencies | keyvalue as dependencies"
+            class="dependencies-list"
+          >
+            <div mat-subheader>
+              <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+                <div>Name</div>
+                <div>Version</div>
+                <div>Description</div>
+                <div>Required</div>
+              </div>
+            </div>
+            <mat-list-item *ngFor="let dependency of dependencies">
+              <div class="dependency" mat-line fxLayout="row" fxLayoutAlign="space-between center">
+                <div>{{ dependency.key }}</div>
+                <div>{{ dependency.value.version }}</div>
+                <div>{{ dependency.value.description }}</div>
+                <div>
+                  <mat-checkbox
+                    class="example-margin"
+                    [(ngModel)]="dependency.value.selected"
+                    [disabled]="!!dependency.value.required"
+                    [matTooltip]="dependency.value.required ? 'This is a required dependency' : ''"
+                  >
+                  </mat-checkbox>
+                </div>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
   </ng-container>
 
   <mat-form-field appearance="fill" *ngIf="data.importType === 'source'">
@@ -24,6 +80,6 @@
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="false">Close</button>
-  <button mat-raised-button color="primary">Import</button>
+  <button mat-button [mat-dialog-close]="false" cdkFocusInitial>Close</button>
+  <button mat-raised-button color="primary" (click)="create()">Import</button>
 </div>
