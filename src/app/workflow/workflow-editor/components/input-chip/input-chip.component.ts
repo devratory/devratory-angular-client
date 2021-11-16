@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Node } from 'rete';
-import { StepInput } from '../../models';
+import { StepInput, StepInputType } from '../../models';
 import { FlowEditorService } from '../../workflow-editor.service';
 
 @Component({
@@ -40,7 +40,7 @@ export class InputChipComponent implements AfterContentInit {
       return;
     }
     this.isArray = input.type === 'array';
-    this.canExpand = !this.isArray && !!Object.keys(input.properties || {}).length;
+    this.canExpand = input.type === StepInputType.Object;
     if (this.canExpand) {
       if (!this.isArray) {
         this.expandableInputs = Object.entries(input.properties || {}).map(([name, input]) => ({

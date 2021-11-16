@@ -1,6 +1,7 @@
 import { NodesData } from 'rete/types/core/data';
 import { Input, Output } from 'rete';
 export enum StepInputType {
+  Object = 'object',
   String = 'string',
   Boolean = 'boolean',
   Number = 'number',

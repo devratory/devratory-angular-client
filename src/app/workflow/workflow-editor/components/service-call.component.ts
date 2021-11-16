@@ -1,7 +1,6 @@
 import { Component, Input, Node, Output } from 'rete';
 import { AngularComponent, AngularComponentData } from 'rete-angular-render-plugin';
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data';
-import { Microservice } from 'src/app/microservice/state/microservice.model';
 import { StepInput } from '../models';
 import { numSocket } from '../sockets';
 import { createIO } from './createIO';
@@ -49,7 +48,10 @@ export class ServiceCallComponent extends Component implements AngularComponent 
     }
   }
 
-  _resolveRef(definitions: { [definitionName: string]: StepInput }, input: StepInput): StepInput {
+  _resolveRef(definitions: { [definitionName: string]: StepInput }, input: StepInput): StepInput | null {
+    if (!input) {
+      return null;
+    }
     if (!input.$ref) {
       const props = Object.entries(input.properties || {});
       if (props.length) {
@@ -59,7 +61,7 @@ export class ServiceCallComponent extends Component implements AngularComponent 
         );
       }
       if (input.items) {
-        input.items = this._resolveRef(definitions, input.items);
+        input.items = this._resolveRef(definitions, input.items) as any;
       }
       return input;
     }

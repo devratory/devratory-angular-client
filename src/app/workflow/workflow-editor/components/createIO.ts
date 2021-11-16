@@ -4,7 +4,7 @@ import { numSocket } from '../sockets';
 
 export function createIO(node: Node, input: StepInput, prefix: string, isInput = true) {
   const isArray = input.type === StepInputType.Array;
-  const canExpand = !isArray && !!Object.keys(input.properties || {}).length;
+  const canExpand = input.type === StepInputType.Object;
   // Create input for top level
   if (isInput) {
     const reteInput = new Input(prefix, input.name || '', numSocket);

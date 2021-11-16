@@ -36,7 +36,7 @@ export class ProjectRedirectGuard implements CanActivate {
       );
     } else {
       this.store.setActive(id as string);
-      this.microserviceService.get().subscribe();
+      this.microserviceService.getByProjectId(id).subscribe();
       return of(true);
     }
   }

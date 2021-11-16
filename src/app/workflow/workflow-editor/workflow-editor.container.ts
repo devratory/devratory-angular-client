@@ -12,6 +12,7 @@ import {
 import { IWorkflow } from './models';
 import { ToolbarChangeEvent } from './components/flow-editor-toolbar/flow-editor-toolbar.component';
 import { FlowEditorService } from './workflow-editor.service';
+import { StepInputType } from './models';
 
 @Component({
   selector: 'dl-workflow-editor',
@@ -85,7 +86,8 @@ export class FlowEditorContainer implements AfterViewInit, OnDestroy {
     if (['POST', 'PATCH', 'PUT'].includes(ev.httpMethod?.toUpperCase())) {
       globals.body = {
         name: 'body',
-        type: {},
+        type: StepInputType.Object,
+        properties: {},
       };
     }
 
@@ -104,7 +106,12 @@ export class FlowEditorContainer implements AfterViewInit, OnDestroy {
     if (ev.authWorkflow) {
       globals.user = {
         name: 'user',
-        type: 'string',
+        type: StepInputType.Object,
+        properties: {
+          id: {
+            type: StepInputType.String,
+          },
+        },
       };
     }
 
@@ -114,12 +121,13 @@ export class FlowEditorContainer implements AfterViewInit, OnDestroy {
   private _arrToStepInput(items: string[], name: string) {
     return {
       name: name,
-      type: items.reduce(
+      type: StepInputType.Object,
+      properties: items.reduce(
         (itemMap, item) => ({
           ...itemMap,
           [item]: {
             name: item,
-            type: 'string',
+            type: StepInputType.String,
             optional: false,
           },
         }),

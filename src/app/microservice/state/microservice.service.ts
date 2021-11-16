@@ -4,9 +4,11 @@ import { MicroserviceStore, MicroserviceState } from './microservice.store';
 
 @Injectable({ providedIn: 'root' })
 export class MicroserviceService extends NgEntityService<MicroserviceState> {
-
   constructor(protected store: MicroserviceStore) {
-    super(store, {resourceName: 'microservices'});
+    super(store, { resourceName: 'microservices' });
   }
 
+  getByProjectId(projectId: string) {
+    return this.get({ params: { projectId } }, { upsert: true });
+  }
 }
