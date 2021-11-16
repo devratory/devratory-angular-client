@@ -94,14 +94,23 @@ export class ProjectSelectorComponent {
   }
 
   switchToProject(projectId: string) {
-    const projectUrl = '/project';
-    const paths = location.href.split(projectUrl)[1].split('/');
-    this.router.navigate([projectUrl, projectId, ...paths.slice(2, paths.length)]);
+    // const projectUrl = '/project';
+    // const paths = location.href.split(projectUrl)[1].split('/');
+    // this.router.navigate([projectUrl, projectId, ...paths.slice(2, paths.length)]);
+    this.redirectTo(projectId);
   }
 
   createNewProject() {
     this.dialogService.open(CreateProjectComponent, {
       panelClass: 'create-project-dialog',
     });
+  }
+
+  redirectTo(projectId: string) {
+    const projectUrl = '/project';
+    const paths = location.href.split(projectUrl)[1].split('/');
+    this.router
+      .navigateByUrl('/', { skipLocationChange: true })
+      .then(() => this.router.navigate([projectUrl, projectId, ...paths.slice(2, paths.length)]));
   }
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { combineQueries } from '@datorama/akita';
+import { map } from 'rxjs/operators';
 import { ProjectQuery } from 'src/app/project/state';
 import { ImportMicroserviceComponent } from '../import-microservice/import-microservice.component';
 import { MicroserviceQuery } from '../state/microservice.query';
@@ -20,7 +22,9 @@ export interface IMicroservice {
   styleUrls: ['./microservice-list.component.scss'],
 })
 export class MicroserviceListComponent implements OnInit {
-  microservices$ = this.query.microservices$;
+  microservices$ = combineQueries([this.query.microservices$, this.projectQuery.selectActiveId()]).pipe(
+    map(([microservices, projectId]) => microservices.filter((ms) => ms.projectId === projectId))
+  );
   constructor(
     private dialog: MatDialog,
     private query: MicroserviceQuery,
@@ -29,7 +33,8 @@ export class MicroserviceListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.service.get({ params: { projectId: this.projectQuery.getActiveId() } }).subscribe();
+    this.projectQuery.selectActiveId().subscribe();
+    this.service.getByProjectId(this.projectQuery.getActiveId()).subscribe();
   }
 
   onClickImport() {

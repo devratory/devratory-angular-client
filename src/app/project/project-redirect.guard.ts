@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { AuthQuery } from '@ekhmoi/angular-sdk';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MicroserviceService } from '../microservice/state/microservice.service';
 import { ProjectService, ProjectStore } from './state';
 
 @Injectable({
@@ -13,7 +14,9 @@ export class ProjectRedirectGuard implements CanActivate {
     private router: Router,
     private authQuery: AuthQuery,
     private service: ProjectService,
-    private store: ProjectStore
+    private store: ProjectStore,
+
+    private microserviceService: MicroserviceService
   ) {}
 
   canActivate(snapShot: ActivatedRouteSnapshot): Observable<boolean> {
@@ -33,6 +36,7 @@ export class ProjectRedirectGuard implements CanActivate {
       );
     } else {
       this.store.setActive(id as string);
+      this.microserviceService.getByProjectId(id).subscribe();
       return of(true);
     }
   }

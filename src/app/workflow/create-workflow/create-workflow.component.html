@@ -1,1 +1,1 @@
-<dl-workflow-editor (save)="onSave($event)" [isCreate]="true"></dl-workflow-editor>
+<dl-workflow-editor (save)="onSave($event)" [isCreate]="true" *ngIf="ready$ | async"></dl-workflow-editor>

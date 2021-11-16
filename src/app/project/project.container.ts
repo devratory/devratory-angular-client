@@ -1,7 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
-import { ProjectQuery, ProjectService, ProjectStore } from './state';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-project',
@@ -29,26 +26,4 @@ import { ProjectQuery, ProjectService, ProjectStore } from './state';
     `,
   ],
 })
-export class ProjectContainer implements OnInit {
-  constructor(
-    private route: ActivatedRoute,
-    private service: ProjectService,
-    private store: ProjectStore,
-    private query: ProjectQuery,
-    private router: Router
-  ) {
-    this.route.paramMap.pipe(map((params) => params.get('id'))).subscribe((id) => {
-      if (!id) {
-        this.service.getAll().subscribe((projects) => {
-          if (projects[0]) {
-            this.router.navigate(['/project', projects[0].id]);
-          }
-        });
-      } else {
-        this.store.setActive(id as string);
-      }
-    });
-  }
-
-  ngOnInit(): void {}
-}
+export class ProjectContainer {}
