@@ -1,15 +1,22 @@
 import { NodesData } from 'rete/types/core/data';
 import { Input, Output } from 'rete';
-
-export interface StepInput<T, E = string[] | number[]> {
-  name: string;
-  type: T;
-  optional: boolean;
-  default: any;
-  enum?: E;
-  description: string;
-  reteInput: any;
-  key: string;
+export enum StepInputType {
+  String = 'string',
+  Boolean = 'boolean',
+  Number = 'number',
+  Array = 'array',
+}
+export interface StepInput<T = any> {
+  type: StepInputType;
+  format?: string;
+  items?: StepInput;
+  $ref?: string;
+  default?: any;
+  properties?: {
+    [propertyName: string]: StepInput;
+  };
+  name?: string;
+  reteInput?: Input | Output;
 }
 
 export interface MethodDefinition {

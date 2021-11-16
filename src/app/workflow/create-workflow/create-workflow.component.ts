@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectQuery } from '../../project/state';
-import { WorkflowService, Workflow } from '../state';
+import { Workflow, WorkflowService } from '../state';
 
 @Component({
   selector: 'app-create-workflow',

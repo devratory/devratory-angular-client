@@ -1,17 +1,10 @@
 import { Node, Output, Input } from 'rete';
-import { StepInput } from '../models';
+import { StepInput, StepInputType } from '../models';
 import { numSocket } from '../sockets';
 
-export function createIO(
-  node: Node,
-  input: StepInput<any>,
-  prefix: string,
-  isInput = true
-) {
-  const isArray = Array.isArray(input?.type);
-  const canExpand =
-    (!isArray || typeof input.type[0] === 'object') &&
-    typeof input?.type === 'object';
+export function createIO(node: Node, input: StepInput, prefix: string, isInput = true) {
+  const isArray = input.type === StepInputType.Array;
+  const canExpand = !isArray && !!Object.keys(input.properties || {}).length;
   // Create input for top level
   if (isInput) {
     const reteInput = new Input(prefix, input.name || '', numSocket);
@@ -24,8 +17,8 @@ export function createIO(
   }
 
   if (canExpand) {
-    Object.entries(input.type).forEach(([name, innerInput]: [string, any]) => {
-      (innerInput as StepInput<any>).name = name;
+    Object.entries(input.properties || {}).forEach(([name, innerInput]: [string, any]) => {
+      (innerInput as StepInput).name = name;
       createIO(node, innerInput, `${prefix}.${name}`, isInput);
     });
   }

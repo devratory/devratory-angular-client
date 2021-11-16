@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Node } from 'rete';
 import { StepInput } from '../../models';
 import { FlowEditorService } from '../../workflow-editor.service';
@@ -9,7 +9,7 @@ import { FlowEditorService } from '../../workflow-editor.service';
   styleUrls: ['./input-chip.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputChipComponent {
+export class InputChipComponent implements AfterContentInit {
   isArray = false;
   canExpand = false;
   expandableInputs: StepInput<any>[] = [];
@@ -19,46 +19,43 @@ export class InputChipComponent {
   @Input() mode!: 'input' | 'output';
   @Input() node!: Node;
   @Input() dynamic = false;
-
   @Input() plainSockets = false;
+  @Input() input!: StepInput<any>;
 
-  private _input!: StepInput<any>;
-  @Input() set input(input: StepInput<any>) {
-    this._input = input;
-    this.isArray = Array.isArray(this.input?.type);
-    this.canExpand =
-      (!this.isArray || typeof this.input.type[0] === 'object') &&
-      typeof this.input?.type === 'object';
-    if (this.canExpand) {
-      if (!this.isArray) {
-        this.expandableInputs = Object.entries(this.input.type).map(
-          ([name, input]) => ({
-            ...(input as any),
-            name,
-          })
-        );
-      } else {
-        this.expandableInputs = Object.entries(this.input.type[0]).map(
-          ([name, input]) => ({
-            ...(input as any),
-            name,
-          })
-        );
-      }
-    }
+  ngAfterContentInit() {
+    this._resolveInput(this.input);
   }
-  get input(): StepInput<any> {
-    return this._input;
-  }
+
+  constructor(private service: FlowEditorService) {}
 
   toggleExpand() {
     this.expanded = !this.expanded;
     this.service.resize$.next();
   }
 
-  defineProperty() {
+  defineProperty() {}
 
+  _resolveInput(input: StepInput) {
+    if (!input) {
+      return;
+    }
+    this.isArray = input.type === 'array';
+    this.canExpand = !this.isArray && !!Object.keys(input.properties || {}).length;
+    if (this.canExpand) {
+      if (!this.isArray) {
+        this.expandableInputs = Object.entries(input.properties || {}).map(([name, input]) => ({
+          ...(input as any),
+          name,
+        }));
+      }
+      // else {
+      //   this.expandableInputs = Object.entries(input.type[0]).map(([name, input]) => ({
+      //     ...(input as any),
+      //     ...this._resolveRef(input),
+      //     items: input.items ? this._resolveRef(input.items) : undefined,
+      //     name,
+      //   }));
+      // }
+    }
   }
-
-  constructor(private service: FlowEditorService) {}
 }

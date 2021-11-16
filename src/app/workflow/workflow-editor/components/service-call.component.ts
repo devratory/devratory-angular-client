@@ -1,14 +1,11 @@
 import { Component, Input, Node, Output } from 'rete';
 import { AngularComponent, AngularComponentData } from 'rete-angular-render-plugin';
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data';
-import { MethodDefinition } from '../models';
+import { Microservice } from 'src/app/microservice/state/microservice.model';
+import { StepInput } from '../models';
 import { numSocket } from '../sockets';
 import { createIO } from './createIO';
 import { MsCallStepComponent } from './ms-call-step/ms-call-step.component';
-
-export interface MSCallNode extends Omit<Node, 'data'> {
-  data: { methodDefinition: { ms: string; method: MethodDefinition } };
-}
 
 interface TreeInput {
   input: Input;
@@ -27,12 +24,48 @@ export class ServiceCallComponent extends Component implements AngularComponent 
   }
 
   async builder(node: any) {
-    node.data.method.flowIn = new Input(`${node.data.ms}/${node.data.method.name}.flowIn`, 'FlowIn', numSocket);
-    node.data.method.flowOut = new Output(`${node.data.ms}/${node.data.method.name}.flowOut`, 'FlowOut', numSocket);
+    const {
+      microservice: {
+        name: msName,
+        contract: { definitions },
+      },
+      method: { name: methodName, input, output },
+    } = node.data;
+    const prefix = `${msName}/${methodName}`;
+    node.data.method.flowIn = new Input(`${prefix}.flowIn`, 'FlowIn', numSocket);
+    node.data.method.flowOut = new Output(`${prefix}.flowOut`, 'FlowOut', numSocket);
     node.addInput(node.data.method.flowIn);
     node.addOutput(node.data.method.flowOut);
-    createIO(node, node.data.method.input, `${node.data.ms}/${node.data.method.name}.input`);
-    createIO(node, node.data.method.output, `${node.data.ms}/${node.data.method.name}.output`, false);
+    node.data.method = {
+      ...node.data.method,
+      input: this._resolveRef(node.data.microservice.contract.definitions, node.data.method.input),
+      output: this._resolveRef(node.data.microservice.contract.definitions, node.data.method.output),
+    };
+    if (node.data.method.input) {
+      createIO(node, node.data.method.input, `${prefix}.input`);
+    }
+    if (node.data.method.output) {
+      createIO(node, node.data.method.output, `${prefix}.output`, false);
+    }
+  }
+
+  _resolveRef(definitions: { [definitionName: string]: StepInput }, input: StepInput): StepInput {
+    if (!input.$ref) {
+      const props = Object.entries(input.properties || {});
+      if (props.length) {
+        input.properties = props.reduce(
+          (properties, [name, prop]) => ({ ...properties, [name]: this._resolveRef(definitions, { ...prop, name }) }),
+          {}
+        );
+      }
+      if (input.items) {
+        input.items = this._resolveRef(definitions, input.items);
+      }
+      return input;
+    }
+
+    const refName = input.$ref?.split('definitions/')[1] as string;
+    return { ...input, ...this._resolveRef(definitions, definitions[refName]), name: refName };
   }
 
   worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {}

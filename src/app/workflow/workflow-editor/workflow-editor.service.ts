@@ -8,6 +8,7 @@ import { debounceTime } from 'rxjs/operators';
 import { IWorkflow, NodeType } from './models';
 import components from './components';
 import { getMockMethod } from 'src/app/mocks';
+import { MicroserviceQuery } from 'src/app/microservice/state/microservice.query';
 
 @Injectable()
 export class FlowEditorService {
@@ -17,12 +18,10 @@ export class FlowEditorService {
   engine!: Engine | null;
   globals!: Node | null;
   id = 0;
+
+  constructor(private microserviceQuery: MicroserviceQuery) {}
+
   private _contextMenuButtons = {
-    nodeItems: {
-      'Click me'() {},
-      Delete: false, // don't show Delete item
-      Clone: false, // or Clone item
-    },
     items: {
       'Add new MS Call': {
         Random: () => {
@@ -51,7 +50,24 @@ export class FlowEditorService {
     const editor = new NodeEditor(id, container);
     editor.use(ConnectionPlugin);
     editor.use(AngularRenderPlugin);
-    editor.use(ContextMenuPlugin, this._contextMenuButtons);
+    const microservices = this.microserviceQuery.getAll();
+    const contextButtons = {
+      items: microservices.reduce(
+        (context, microservice) => ({
+          ...context,
+          [microservice.name]: microservice.contract.methods.reduce(
+            (methodContext, method) => ({
+              ...methodContext,
+              [method.name]: () => this.createComponent(NodeType.MicroserviceCall, { microservice, method }),
+            }),
+            {}
+          ),
+        }),
+        {}
+      ),
+    };
+    console.log(contextButtons);
+    editor.use(ContextMenuPlugin, contextButtons);
 
     return editor;
   }
@@ -97,8 +113,8 @@ export class FlowEditorService {
       this.globals = node;
       this.editor?.addNode(this.globals);
       setTimeout(() => {
-        currentConnections?.forEach(({input, output}) => this.editor?.connect(output, input));
-      }, 200)
+        currentConnections?.forEach(({ input, output }) => this.editor?.connect(output, input));
+      }, 200);
       // this.editor?.connect()
     }
   }

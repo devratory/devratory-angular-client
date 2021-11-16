@@ -1,3 +1,5 @@
+import { StepInput } from 'src/app/workflow/workflow.interface';
+
 class ContractDefinition {}
 class ContractMethod {
   name!: string;
@@ -32,7 +34,7 @@ export class Contract {
   version!: string;
   transport!: number;
   definitions!: {
-    [key: string]: ContractDefinition;
+    [key: string]: StepInput;
   };
   methods!: ContractMethod[];
   createdBy!: string;
