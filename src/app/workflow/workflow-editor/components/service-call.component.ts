@@ -6,15 +6,8 @@ import { numSocket } from '../sockets';
 import { createIO } from './createIO';
 import { MsCallStepComponent } from './ms-call-step/ms-call-step.component';
 
-interface TreeInput {
-  input: Input;
-  name: string;
-  data: any;
-  children: TreeInput[];
-}
 export class ServiceCallComponent extends Component implements AngularComponent {
   data!: AngularComponentData;
-  treeInput!: TreeInput;
 
   constructor() {
     super('MS_CALL');
